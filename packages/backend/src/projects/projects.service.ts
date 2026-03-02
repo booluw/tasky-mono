@@ -28,6 +28,20 @@ export class ProjectsService {
         },
       });
 
+      await Promise.all([
+        prisma.sprints.create({
+          data: {
+            title: 'BACKLOG',
+            isBacklog: true,
+            startDate: new Date(),
+            endDate: new Date(),
+            goals: 'Project backlog',
+            uid: user.id,
+            pid: id,
+          },
+        }),
+      ]);
+
       return { message: 'project created', pid: id };
     } catch (error) {
       throw new InternalServerErrorException(error);
@@ -199,20 +213,19 @@ export class ProjectsService {
 
   async deleteProject(req: any, id: string): Promise<{ message: string }> {
     try {
-      const user = await getUserFromRequest(req)
+      const user = await getUserFromRequest(req);
 
       if (['ADMIN', 'SUPER_ADMIN'].includes(user.role)) {
-
         await prisma.projects.delete({
           where: {
-            id
-          }
-        })
+            id,
+          },
+        });
 
-        return { message: 'Project deleted' }
+        return { message: 'Project deleted' };
       }
 
-      throw new Error('Unauthorized to delete project')
+      throw new Error('Unauthorized to delete project');
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException({ error });
