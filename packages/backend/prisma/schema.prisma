@@ -89,6 +89,8 @@ model Sprints {
   endDate   DateTime
   goals     String   @db.VarChar(5000)
   started   Boolean  @default(false)
+  isEnded   Boolean  @default(false)
+  isBacklog Boolean  @default(false)
   note      String   @default("") @db.VarChar(300)
   pid       String
   uid       String

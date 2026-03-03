@@ -47,22 +47,25 @@ onMounted(() => {
         <div class="flex flex-col">
           <div class="">
             <div class="flex gap-5 items-center">
-              <h3 class="text-lg font-semibold text-primary">
+              <h3 class="text-lg font-semibold text-primary cursor-pointer" @click="isOpened = !isOpened">
                 {{ sprint.title }}
               </h3>
               <el-tag v-if="sprint.started" size="small">
                 CURRENT
               </el-tag>
             </div>
-            <p class="text-sm text-gray-300">
+            <p class="text-sm text-gray-300" v-if="!sprint.isBacklog">
               {{ format(sprint.startDate, 'do MMM, yyy') }} -
               {{ format(sprint.endDate, 'do MMM, yyy') }}
+            </p>
+            <p class="text-sm text-gray-300" v-else>
+              {{ sprint.tasks.length }} Tasks
             </p>
           </div>
         </div>
       </div>
 
-      <div class="flex gap-5 items-center">
+      <div v-if="!sprint.isBacklog" class="flex gap-5 items-center">
         <el-dropdown :disabled="loading" @command="handleCommand">
           <el-icon class="cursor-pointer" :size="20">
             <Loading v-if="loading" class="animate-spin" />
@@ -110,12 +113,12 @@ onMounted(() => {
 
     <div v-if="isOpened" class="mt-3">
       <div v-if="sprint.tasks.length === 0" class="text-gray-300">
-        No tasks scheduled for this sprint, yet.
+        No tasks {{ sprint.isBacklog ? 'added to backlog' : 'scheduled for this sprint'}}, yet.
         <router-link
           class="text-gray-500 underline"
           :to="{ name: 'add-task-to-sprint', params: { sprintId: sprint.id } }"
         >
-          Add task to sprint
+          Add task to {{ sprint.isBacklog ? 'project backlog' : 'sprint'}}
         </router-link>
       </div>
       <div v-else class="grid gap-3">

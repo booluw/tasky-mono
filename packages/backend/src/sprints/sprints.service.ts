@@ -42,6 +42,7 @@ export class SprintsService {
       const sprints = await prisma.sprints.findMany({
         where: {
           pid,
+          isEnded: false,
         },
         include: {
           tasks: {
@@ -256,21 +257,31 @@ export class SprintsService {
 
   async startSprint(sid: string) {
     try {
-      const pid = await prisma.sprints.findUnique({
-        where: { id: sid },
-        select: { pid: true },
-      });
+      const [pid] = await Promise.all([
+        prisma.sprints.findUnique({
+          where: { id: sid },
+          select: { pid: true },
+        }),
+      ]);
 
-      if (pid && pid.pid) {
-        await prisma.sprints.updateMany({
-          where: {
-            pid: pid?.pid,
-          },
-          data: {
-            started: false,
-          },
-        });
-      }
+      // if (pid && pid.pid) {
+      //   await prisma.sprints.updateMany({
+      //     where: {
+      //       AND: [
+      //         {
+      //           pid: pid?.pid,
+      //         },
+      //         {
+      //           started: false,
+      //         },
+      //       ],
+      //     },
+      //     data: {
+      //       started: false,
+      //       isEnded: true,
+      //     },
+      //   });
+      // }
 
       const tasks = await prisma.sprints.update({
         where: {
@@ -343,6 +354,7 @@ export class SprintsService {
           where: { id: sid },
           data: {
             started: false,
+            isEnded: true,
             note: payload.note,
           },
           select: {
