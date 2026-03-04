@@ -59,11 +59,11 @@ export function useStaff() {
     }
   }
 
-  const searchStaffByKeyword = async () => {
+  const searchStaffByKeyword = async (keyword?: string) => {
     loading.value = true
 
     try {
-      const { users, total } = await api.get(`/search?query=${keyword.value}&size=${meta.size}&page=${meta.page - 1}`)
+      const { users, total } = await api.get(`/search?query=${keyword}&size=${meta.size}&page=${meta.page - 1}`)
 
       staff.value = users
       meta.total = total

@@ -117,11 +117,11 @@ async function submitTask(formEl: FormInstance | undefined) {
         <el-form-item label="Assignee" prop="uid">
           <el-autocomplete v-model="task.keyword" placeholder="Search for staff" :fetch-suggestions="searchStaff"
             @select="(item: any) => task.uid = item.id">
-            <template #deefault="{ item }">
+            <!-- <template #default="{ item }">
               <div class="">
-                {{ item }}
+                {{ item.firstName }} {{ item.lastName }}
               </div>
-            </template>
+            </template> -->
           </el-autocomplete>
         </el-form-item>
 
