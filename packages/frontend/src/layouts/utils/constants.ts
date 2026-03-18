@@ -2,9 +2,9 @@ import type { IRoutes } from '../types'
 
 import ClientIcon from '../icons/ClientIcon.vue'
 import DashboardIcon from '../icons/DashboardIcon.vue'
-import ResourcesIcon from '../icons/ResourcesIcon.vue'
 import SettingIcon from '../icons/SettingIcon.vue'
 import StaffIcon from '../icons/StaffIcon.vue'
+import HelpIcon from '../icons/HelpIcon.vue'
 
 export const ROUTES: IRoutes[] = [
   {
@@ -29,9 +29,9 @@ export const ROUTES: IRoutes[] = [
 
 export const COMMON: IRoutes[] = [
   {
-    uri: '//dashtechmanagement.com/blog',
-    title: 'Resources',
-    icon: ResourcesIcon,
+    uri: '//forms.gle/YnkGRvn1gnVMPh2LA',
+    title: 'Help',
+    icon: HelpIcon,
     external: true,
     acl: ['ADMIN', 'USER', 'SUPER_ADMIN']
   },

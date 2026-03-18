@@ -113,22 +113,20 @@ onMounted(() => {
 
     <div v-if="isOpened" class="mt-3">
       <div v-if="sprint.tasks.length === 0" class="text-gray-300">
-        No tasks {{ sprint.isBacklog ? 'added to backlog' : 'scheduled for this sprint'}}, yet.
-        <router-link
-          class="text-gray-500 underline"
-          :to="{ name: 'add-task-to-sprint', params: { sprintId: sprint.id } }"
-        >
-          Add task to {{ sprint.isBacklog ? 'project backlog' : 'sprint'}}
+        No tasks {{ sprint.isBacklog ? 'added to backlog' : 'scheduled for this sprint' }}, yet.
+        <router-link class="text-gray-500 underline"
+          :to="{ name: 'add-task-to-sprint', params: { sprintId: sprint.id } }">
+          Add task to {{ sprint.isBacklog ? 'project backlog' : 'sprint' }}
         </router-link>
       </div>
       <div v-else class="grid gap-3">
-        <div
-          v-for="(task, key) in sprint.tasks"
-          :key class="border border-gray-50 rounded-xl p-5 flex justify-between items-center"
-        >
+        <div v-for="(task, key) in sprint.tasks" :key
+          class="border border-gray-50 rounded-xl p-5 flex justify-between items-center">
           <div class="flex flex-col">
             <div class="flex gap-3">
-              <h3>{{ task.title }}</h3>
+              <router-link
+                :to="{ name: 'view-sprint-task', params: { id: sprint.pid, sprintId: sprint.id, taskId: task.id } }">{{
+                task.title }}</router-link>
               <el-tag size="small" class="capitalize" :type="TAG_TYPES[task.status as 'TO_DO']">
                 {{ task.status.toLowerCase().replace('_', ' ') }}
               </el-tag>
@@ -136,7 +134,7 @@ onMounted(() => {
             <div class="text-gray-300 text-sm flex gap-3">
               <div class="">
                 Staff Assigned: <span class="text-gray-500">{{ task.assignedTo.firstName }} {{ task.assignedTo.lastName
-                }}</span>
+                  }}</span>
               </div>
               |
               <div class="">
@@ -145,8 +143,7 @@ onMounted(() => {
             </div>
           </div>
           <router-link
-            :to="{ name: 'view-sprint-task', params: { id: sprint.pid, sprintId: sprint.id, taskId: task.id } }"
-          >
+            :to="{ name: 'view-sprint-task', params: { id: sprint.pid, sprintId: sprint.id, taskId: task.id } }">
             <el-button type="primary" size="large" plain bg text>
               View Details
             </el-button>

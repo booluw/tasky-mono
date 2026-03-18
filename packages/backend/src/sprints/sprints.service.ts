@@ -150,7 +150,10 @@ export class SprintsService {
     }
   }
 
-  async updateTask(id: string, data: { status: string }) {
+  async updateTask(
+    id: string,
+    data: { status?: string; sid?: string; uid?: string },
+  ) {
     try {
       const task = await prisma.tasks.update({
         where: { id },
@@ -191,26 +194,6 @@ export class SprintsService {
           },
         },
       });
-
-      if (task.status !== 'TODO') {
-        await prisma.projects.update({
-          where: {
-            id: task.sprint.pid,
-          },
-          data: {
-            status: 'IN_PROGRESS',
-          },
-        });
-
-        await prisma.sprints.update({
-          where: {
-            id: task.sprint.id,
-          },
-          data: {
-            started: true,
-          },
-        });
-      }
 
       return { task };
     } catch (error) {
