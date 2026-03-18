@@ -17,7 +17,7 @@ const width = computed(() => {
 
     case 'third':
       return 'w-1/3'
-    
+
     case 'large':
       return 'w-2/3'
 
@@ -35,7 +35,8 @@ const width = computed(() => {
           <h2 class="font-semibold capitalize">
             {{ heading }}
           </h2>
-          <p class="text-sm text-gray-200" v-if="subheading !== undefined">
+          <slot name="subheading" v-if="$slots.subheading" />
+          <p class="text-sm text-gray-200" v-else-if="subheading !== undefined">
             {{ subheading }}
           </p>
         </div>

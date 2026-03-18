@@ -11,7 +11,7 @@ export class DashboardService {
       let tasks: unknown[] = [];
 
       switch (user.role) {
-        case 'ADMIN':
+        case 'SUPER_ADMIN':
           tasks = await prisma.tasks.findMany({
             include: {
               sprint: {

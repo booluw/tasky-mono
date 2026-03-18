@@ -10,7 +10,11 @@ import {
   Put,
 } from '@nestjs/common';
 import { SprintsService } from './sprints.service';
-import { CreateSprintDto, CreateSprintTaskDto, EndSprintDto } from './dto/create-sprint.dto';
+import {
+  CreateSprintDto,
+  CreateSprintTaskDto,
+  EndSprintDto,
+} from './dto/create-sprint.dto';
 import { UpdateSprintDto } from './dto/update-sprint.dto';
 
 @Controller('sprints')
@@ -67,7 +71,10 @@ export class SprintsController {
   }
 
   @Patch('/task/:id/status')
-  updateTaskStatus(@Param('id') id: string, @Body() data: { status: string }) {
+  updateTaskStatus(
+    @Param('id') id: string,
+    @Body() data: { status?: string; sid?: string; uid?: string },
+  ) {
     return this.sprintsService.updateTask(id, data);
   }
 

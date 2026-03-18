@@ -183,8 +183,7 @@ useClickOutside(navRef, () => {
                 </router-link>
               </div>
             </el-scrollbar>
-
-            <router-link :to="{ name: 'new-project' }" class="p-3 rounded bg-gray-50/50 text-gray-300 flex gap-3 items-center text-sm mt-2">
+            <router-link :to="{ name: 'new-project' }" v-if="userRole === 'SUPER_ADMIN'" class="p-3 rounded bg-gray-50/50 text-gray-300 flex gap-3 items-center text-sm mt-2">
               <el-icon>
                 <Plus />
               </el-icon>
