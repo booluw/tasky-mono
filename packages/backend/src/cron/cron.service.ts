@@ -41,7 +41,7 @@ export class CronService {
             name: `${item.firstName} ${item.lastName}`,
             email: item.email,
           },
-          sprint: sprint.filter((sprint) => sprint !== null)[0],
+          sprint: sprint.filter((sprint) => sprint.sprint !== null)[0],
         };
       }),
     );
