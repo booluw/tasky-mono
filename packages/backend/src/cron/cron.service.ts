@@ -80,7 +80,7 @@ export class CronService {
             { name: item.client.name, email: item.client.email },
             {
               name: 'Damilola Shopade',
-              email: 'pheyidamilola@gmail.com',
+              email: 'dashprojectsmanagement@gmail.com',
             },
           ],
           html: clientReportEmailBuilder({
