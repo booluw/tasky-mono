@@ -112,70 +112,87 @@ watch(projectId, () => {
         </div>
 
         <el-scrollbar class="mt-5 !h-[65vh] overflow-y-auto">
-          <div v-if="tab === 'details'" :class="{ 'bg-gray-50/20 rounded-xl p-5': !isSide }">
-            <div class="border-gray-100 border-b pb-3 mb-3">
-              <h3 class="text-xl">
-                Project Information
-              </h3>
+          <template v-if="tab === 'details'">
+            <div :class="{ 'bg-gray-50/50 rounded-xl p-5': !isSide }">
+              <div class="border-gray-100 border-b pb-3 mb-3">
+                <h3 class="text-xl">
+                  Project Information
+                </h3>
+              </div>
+              <div class="grid gap-5 grid-cols-3" :class="{ '!grid-cols-1 !gap-3': isSide }">
+                <div class="">
+                  <h4 class="opacity-60 font-normal">
+                    Project Name
+                  </h4>
+                  {{ project.title }}
+                </div>
+
+                <div class="">
+                  <h4 class="opacity-60 font-normal">
+                    Project Type
+                  </h4>
+                  {{ project.type.replace("_", " ") }}
+                </div>
+
+                <div class="">
+                  <h4 class="opacity-60 font-normal">
+                    Client
+                  </h4>
+                  {{ project.client.firstName }} {{ project.client.lastName }}
+                </div>
+
+                <div class="">
+                  <h4 class="opacity-60 font-normal">
+                    Project Manager
+                  </h4>
+                  <template v-if="productManager !== 'N/A'">
+                    {{ productManager.firstName }} {{ productManager.lastName }}
+                  </template>
+                  <template v-else>
+                    {{ productManager }}
+                  </template>
+                </div>
+
+                <div class="">
+                  <h4 class="opacity-60 font-normal">
+                    Start Date
+                  </h4>
+                  {{ format(project.startDate, 'do MMM, yyy') }}
+                </div>
+
+                <div class="">
+                  <h4 class="opacity-60 font-normal">
+                    Start Date
+                  </h4>
+                  {{ project.status.replace("_", " ") }}
+                </div>
+              </div>
+
+              <div class="mt-5">
+                <h4 class="opacity-60 font-normal">
+                  Description
+                </h4>
+                <p :class="{ 'line-clamp-3': isSide }">
+                  {{ project.description }}
+                </p>
+              </div>
             </div>
-            <div class="grid gap-5 grid-cols-3" :class="{ '!grid-cols-1 !gap-3': isSide }">
-              <div class="">
-                <h4 class="opacity-60 font-normal">
-                  Project Name
-                </h4>
-                {{ project.title }}
+            <div class="mt-5 bg-gray-50/50 rounded-xl p-5">
+              <div class="border-gray-100 border-b pb-3 mb-3">
+                <h3 class="text-xl">
+                  Project Members
+                </h3>
               </div>
 
-              <div class="">
-                <h4 class="opacity-60 font-normal">
-                  Project Type
-                </h4>
-                {{ project.type.replace("_", " ") }}
-              </div>
-
-              <div class="">
-                <h4 class="opacity-60 font-normal">
-                  Client
-                </h4>
-                {{ project.client.firstName }} {{ project.client.lastName }}
-              </div>
-
-              <div class="">
-                <h4 class="opacity-60 font-normal">
-                  Project Manager
-                </h4>
-                <template v-if="productManager !== 'N/A'">
-                  {{ productManager.firstName }} {{ productManager.lastName }}
-                </template>
-                <template v-else>
-                  {{ productManager }}
-                </template>
-              </div>
-
-              <div class="">
-                <h4 class="opacity-60 font-normal">
-                  Start Date
-                </h4>
-                {{ format(project.startDate, 'do MMM, yyy') }}
-              </div>
-
-              <div class="">
-                <h4 class="opacity-60 font-normal">
-                  Start Date
-                </h4>
-                {{ project.status.replace("_", " ") }}
+              <div class="flex gap-5 flex-wrap">
+                <router-link :to="{ name: 'view-staff', params: { id: member.id} }" v-for="member in project.members" :key="member.id">
+                  <el-tag class="capitalize">
+                    {{ member.firstName }} {{ member.lastName }}
+                  </el-tag>
+                </router-link>
               </div>
             </div>
-
-            <div class="mt-5">
-              <h4 class="opacity-60 font-normal">
-                Description
-              </h4>
-              <p :class="{ 'line-clamp-3': isSide }">
-                {{ project.description }}
-              </p>
-            </div>
-          </div>
+          </template>
           <ViewProjectDocs v-else-if="tab === 'doc'" />
           <ViewProjectSprints v-else />
         </el-scrollbar>
