@@ -62,9 +62,12 @@ export function useProject() {
       if (project.value?.id !== id) {
         project.value = undefined
       }
-      const { project: _project } = await api.get(`/${id}`)
+      const { project: _project, members } = await api.get(`/${id}`)
 
-      project.value = _project
+      project.value = {
+        ..._project,
+        members
+      }
     } catch (error: any | { message: string }) {
       ElMessage.error(error.message)
     }

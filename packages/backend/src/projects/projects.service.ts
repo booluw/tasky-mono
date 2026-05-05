@@ -181,31 +181,58 @@ export class ProjectsService {
 
   async findOne(id: string) {
     try {
-      const project = await prisma.projects.findUnique({
-        where: {
-          id,
-        },
-        include: {
-          client: {
-            select: {
-              firstName: true,
-              lastName: true,
-            },
+      const [project, members] = await Promise.all([
+        prisma.projects.findUnique({
+          where: {
+            id,
           },
-          users: {
-            include: {
-              user: {
-                select: {
-                  firstName: true,
-                  lastName: true,
+          include: {
+            client: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+            users: {
+              include: {
+                user: {
+                  select: {
+                    firstName: true,
+                    lastName: true,
+                  },
                 },
               },
             },
           },
-        },
-      });
+        }),
+        prisma.tasks.findMany({
+          where: {
+            sprint: {
+              pid: id,
+            },
+          },
+          select: {
+            assignedTo: {
+              select: {
+                firstName: true,
+                lastName: true,
+                id: true,
+              },
+            },
+          },
+        }),
+      ]);
 
-      return { project };
+      return {
+        project,
+        members: [
+          ...new Map(
+            members
+              .map(({ assignedTo }) => ({ ...assignedTo }))
+              .map((item) => [item.id, item]),
+          ).values(),
+        ],
+      };
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

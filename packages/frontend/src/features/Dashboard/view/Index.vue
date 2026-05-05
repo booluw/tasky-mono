@@ -4,9 +4,8 @@ import { computed, onMounted } from 'vue'
 
 import { useAuthStore } from '@/features/Auth/store/useAuthStore'
 import { useDate } from '@/shared/composables/useDate'
-import { useDashoard } from '../composables/useDashboard'
-
 import DashboardMentions from '../components/mentions.vue'
+import { useDashoard } from '../composables/useDashboard'
 
 const usedashboard = useDashoard()
 const { user } = useAuthStore()
