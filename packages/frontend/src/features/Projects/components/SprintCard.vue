@@ -100,7 +100,7 @@ onMounted(() => {
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <div class="text-gray-300 cursor-pointer flex items-center text-sm" @click="isOpened = !isOpened">
+        <div class="text-gray-300 cursor-pointer flex items-center text-xs md:text-sm line-clamp-2" @click="isOpened = !isOpened">
           Goal: {{ sprint.goals }}
 
           <el-icon class="ml-2">
@@ -131,12 +131,12 @@ onMounted(() => {
                 {{ task.status.toLowerCase().replace('_', ' ') }}
               </el-tag>
             </div>
-            <div class="text-gray-300 text-sm flex gap-3">
+            <div class="text-gray-300 text-sm flex gap-3 flex-col md:flex-row">
               <div class="">
                 Staff Assigned: <span class="text-gray-500">{{ task.assignedTo.firstName }} {{ task.assignedTo.lastName
                   }}</span>
               </div>
-              |
+              <span class="hidden md:block">|</span>
               <div class="">
                 Due Date: <span class="text-gray-500">{{ format(task.dueDate, 'do MMM, yyy') }}</span>
               </div>

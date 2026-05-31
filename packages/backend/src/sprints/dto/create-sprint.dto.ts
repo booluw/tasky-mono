@@ -74,3 +74,14 @@ export class EndSprintDto {
   @IsString()
   sid!: string
 }
+
+export class CreateCommentDto {
+  @IsString()
+  text!: string;
+
+  @IsString()
+  sid!: string;
+
+  @IsString()
+  uid!: string;
+}
