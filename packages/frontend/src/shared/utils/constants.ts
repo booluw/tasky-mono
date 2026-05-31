@@ -55,6 +55,11 @@ export const STATUS = [
     scope: ['task'],
   },
   {
+    label: 'Kickback',
+    value: 'KICKBACK',
+    scope: ['task'],
+  },
+  {
     label: 'Done',
     value: 'DONE',
     scope: ['task'],

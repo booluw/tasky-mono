@@ -70,6 +70,14 @@ export class SprintsController {
     return this.sprintsService.findTask(id);
   }
 
+  @Post('/task/:id/comment')
+  createTaskComment(
+    @Param('id') id: string,
+    @Body() data: { text: string; uid: string },
+  ) {
+    return this.sprintsService.createTaskComment(id, data);
+  }
+
   @Patch('/task/:id/status')
   updateTaskStatus(
     @Param('id') id: string,

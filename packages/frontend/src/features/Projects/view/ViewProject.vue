@@ -60,10 +60,10 @@ watch(projectId, () => {
     <div v-if="!isEmpty(project)" class="">
       <div class="flex gap-5 items-center justify-between" :class="{ 'flex-col !items-start': isSide }">
         <div class="">
-          <h2 class="text-3xl capitalize">
+          <h2 class="text-xl md:text-3xl capitalize">
             {{ project.title }}
           </h2>
-          <p class="uppercase text-gray-300" :class="{ 'text-sm': isSide }">
+          <p class="uppercase text-gray-300 max-md:text-sm" :class="{ 'text-sm': isSide }">
             {{ project.id }}
           </p>
         </div>
@@ -90,21 +90,21 @@ watch(projectId, () => {
       </div>
 
       <div class="mt-10">
-        <div v-if="!isSide" class="grid gap-10 grid-cols-3 bg-gray-50 p-2 rounded">
+        <div v-if="!isSide" class="grid gap-5 md:gap-10 grid-cols-3 bg-gray-50 p-2 rounded text-sm md:text-md">
           <div
-            class="text-center p-4 rounded cursor-pointer ease-in-out transition-all"
+            class="text-center p-2 md:p-4 rounded cursor-pointer ease-in-out transition-all"
             :class="{ 'bg-white': tab === 'details' }" @click="tab = 'details'"
           >
             Project Details
           </div>
           <div
-            class="text-center p-4 rounded cursor-pointer ease-in-out transition-all"
+            class="text-center p-2 md:p-4 rounded cursor-pointer ease-in-out transition-all"
             :class="{ 'bg-white': tab === 'doc' }" @click="tab = 'doc'"
           >
             Documents
           </div>
           <div
-            class="text-center p-4 rounded cursor-pointer ease-in-out transition-all"
+            class="text-center p-2 md:p-4 rounded cursor-pointer ease-in-out transition-all"
             :class="{ 'bg-white': tab === 'sprint' }" @click="tab = 'sprint'"
           >
             Sprints
@@ -162,7 +162,7 @@ watch(projectId, () => {
 
                 <div class="">
                   <h4 class="opacity-60 font-normal">
-                    Start Date
+                    Status
                   </h4>
                   {{ project.status.replace("_", " ") }}
                 </div>

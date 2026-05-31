@@ -59,7 +59,7 @@ async function submitProject(formEl: FormInstance | undefined) {
     }
 
     try {
-      await useproject.updateProject(pick(project.value, ['id', 'title', 'description', 'startDate', 'endDate', 'type']))
+      await useproject.updateProject(pick(project.value, ['id', 'title', 'description', 'startDate', 'endDate', 'type', 'status']))
       router.push({ name: 'view-project', params: { id: route.params.id } })
     }
     catch (error) {
@@ -92,13 +92,13 @@ onMounted(async () => {
           <el-input v-model="project.title" type="text" placeholder="Rocky plains" />
         </el-form-item>
         <div class="grid md:grid-cols-2 md:gap-3">
-          <el-form-item class="md:col-span-1" prop="type" label="Project Type">
-            <el-select v-model="project.status" placeholder="Select project">
+          <el-form-item class="md:col-span-1" prop="type" label="Project Status">
+            <el-select v-model="project.status" placeholder="Select status">
               <el-option v-for="type in STATUS.filter((s) => s.scope.includes('project'))" :key="type.label" :value="type.value" :label="type.label" />
             </el-select>
           </el-form-item>
           <el-form-item class="md:col-span-1" prop="type" label="Project Type">
-            <el-select v-model="project.type" placeholder="Select project">
+            <el-select v-model="project.type" placeholder="Select type">
               <el-option v-for="type in PROJECT_TYPES" :key="type.label" :value="type.value" :label="type.label" />
             </el-select>
           </el-form-item>

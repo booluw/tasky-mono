@@ -72,6 +72,19 @@ export function useSprint() {
     }
   }
 
+  const createTaskComment = async (payload: any) => {
+    const { id, ...data } = payload
+
+    try {
+      const { message, task } = await api.post(`/task/${id}/comment`, data)
+
+      ElMessage.success(message)
+      return task
+    } catch (error: any | { message: string }) {
+      ElMessage.error(error.message)
+    }
+  }
+
   const findTaskById = async (id: string) => {
     try {
       return await api.get(`/task/${id}`)
@@ -139,6 +152,7 @@ export function useSprint() {
     updateTaskById,
     findSprintById,
     endSprintById,
-    startSprintById
+    startSprintById,
+    createTaskComment
   }
 }

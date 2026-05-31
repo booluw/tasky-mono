@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import {
+    CreateCommentDto,
   CreateSprintDto,
   CreateSprintTaskDto,
   EndSprintDto,
@@ -201,6 +202,25 @@ export class SprintsService {
     }
   }
 
+  async createTaskComment(id: string, data: CreateCommentDto) {
+    try {
+      await prisma.comments.create({
+        data: {
+          ...data,
+          tid: id,
+        },
+      });
+
+      const { task } = await this.findTask(id);
+
+      // Notify the watchers of this task
+
+      return { message: 'Comment created', task };
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
   update(id: number, updateSprintDto: UpdateSprintDto) {
     return `This action updates a #${id} sprint`;
   }
@@ -246,25 +266,6 @@ export class SprintsService {
           select: { pid: true },
         }),
       ]);
-
-      // if (pid && pid.pid) {
-      //   await prisma.sprints.updateMany({
-      //     where: {
-      //       AND: [
-      //         {
-      //           pid: pid?.pid,
-      //         },
-      //         {
-      //           started: false,
-      //         },
-      //       ],
-      //     },
-      //     data: {
-      //       started: false,
-      //       isEnded: true,
-      //     },
-      //   });
-      // }
 
       const tasks = await prisma.sprints.update({
         where: {
