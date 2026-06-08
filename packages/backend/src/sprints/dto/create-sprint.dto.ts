@@ -65,22 +65,19 @@ export class UpdateSprintTaskDto {
 
 export class EndSprintDto {
   @IsArray()
-  tasks!: string[]
+  tasks!: string[];
 
   @IsString()
   @IsOptional()
-  note!: string
+  note!: string;
 
   @IsString()
-  sid!: string
+  sid!: string;
 }
 
 export class CreateCommentDto {
   @IsString()
   text!: string;
-
-  @IsString()
-  sid!: string;
 
   @IsString()
   uid!: string;
