@@ -164,23 +164,25 @@ useClickOutside(navRef, () => {
             </div>
             <el-scrollbar v-else class="!max-h-[28vh] overflow-y-scroll">
               <div class="flex flex-col gap-2">
-                <router-link
-                  v-for="project in activeProjects.projects" :key="project.id"
-                  :to="{ name: 'view-project', params: { id: project.id } }"
-                  class="text-sm flex justify-between items-center p-3 rounded text-gray-300 hover:text-black transition-colors ease-in-out"
-                  :class="{ 'bg-gray-50 !text-black': route.path.includes(`/projects/${project.id}`) }"
-                >
-                  <div class="line-clamp-1 w-[85%]">
-                    {{ project.title }}
-                  </div>
-
-                  <div
-                    class="h-5 w-5 rounded-full text-xs bg-gray-50 flex items-center justify-center"
-                    :class="{ '!bg-black !text-white': route.path.includes(`/projects/${project.id}`) }"
+                <template v-for="project in activeProjects.projects" :key="project.id">
+                  <router-link
+                    v-if="project.tasks.length !== 0"
+                    :to="{ name: 'view-project', params: { id: project.id } }"
+                    class="text-sm flex justify-between items-center p-3 rounded text-gray-300 hover:text-black transition-colors ease-in-out"
+                    :class="{ 'bg-gray-50 !text-black': route.path.includes(`/projects/${project.id}`) }"
                   >
-                    {{ project.tasks.length }}
-                  </div>
-                </router-link>
+                    <div class="line-clamp-1 w-[85%]">
+                      {{ project.title }}
+                    </div>
+
+                    <div
+                      class="h-5 w-5 rounded-full text-xs bg-gray-50 flex items-center justify-center"
+                      :class="{ '!bg-black !text-white': route.path.includes(`/projects/${project.id}`) }"
+                    >
+                      {{ project.tasks.length }}
+                    </div>
+                  </router-link>
+                </template>
               </div>
             </el-scrollbar>
             <router-link :to="{ name: 'new-project' }" v-if="userRole === 'SUPER_ADMIN'" class="p-3 rounded bg-gray-50/50 text-gray-300 flex gap-3 items-center text-sm mt-2">

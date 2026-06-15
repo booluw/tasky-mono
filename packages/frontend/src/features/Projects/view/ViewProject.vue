@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router'
 
 import { useDate } from '@/shared/composables/useDate'
 
+import ViewProjectCompletedSprint from '../components/ViewProjectCompletedSprint.vue'
 import ViewProjectDocs from '../components/ViewProjectDocs.vue'
 import ViewProjectSprints from '../components/ViewProjectSprints.vue'
 import { useProject } from '../composable/useProjects'
@@ -17,7 +18,7 @@ const { project } = useproject
 const { format } = useDate()
 
 const loading = ref(false)
-const tab = ref<'details' | 'doc' | 'sprint'>('sprint')
+const tab = ref<'details' | 'doc' | 'sprint' | 'completed'>('sprint')
 
 const isSide = route.meta.side
 
@@ -90,7 +91,7 @@ watch(projectId, () => {
       </div>
 
       <div class="mt-10">
-        <div v-if="!isSide" class="grid gap-5 md:gap-10 grid-cols-3 bg-gray-50 p-2 rounded text-sm md:text-md">
+        <div v-if="!isSide" class="grid gap-5 md:gap-10 grid-cols-4 bg-gray-50 p-2 rounded text-sm md:text-md">
           <div
             class="text-center p-2 md:p-4 rounded cursor-pointer ease-in-out transition-all"
             :class="{ 'bg-white': tab === 'details' }" @click="tab = 'details'"
@@ -108,6 +109,11 @@ watch(projectId, () => {
             :class="{ 'bg-white': tab === 'sprint' }" @click="tab = 'sprint'"
           >
             Sprints
+          </div>
+          <div
+            class="text-center p-2 md:p-4 rounded cursor-pointer ease-in-out transition-all"
+            :class="{ 'bg-white': tab === 'completed' }" @click="tab = 'completed'">
+            Completed Sprints
           </div>
         </div>
 
@@ -194,6 +200,7 @@ watch(projectId, () => {
             </div>
           </template>
           <ViewProjectDocs v-else-if="tab === 'doc'" />
+          <ViewProjectCompletedSprint v-else-if="tab === 'completed'" />
           <ViewProjectSprints v-else />
         </el-scrollbar>
       </div>

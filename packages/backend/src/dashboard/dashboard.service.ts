@@ -31,11 +31,11 @@ export class DashboardService {
           tasks = await prisma.tasks.findMany({
             where: {
               uid: user.id,
-              NOT: {
-                sprint: {
-                  started: false,
-                },
-              },
+              // NOT: {
+              //   sprint: {
+              //     started: false,
+              //   },
+              // },
             },
             include: {
               sprint: {

@@ -38,12 +38,12 @@ export class SprintsService {
     return `This action returns all sprints`;
   }
 
-  async findSprintsByProjectId(pid: string) {
+  async findSprintsByProjectId(pid: string, completed?: string) {
     try {
       const sprints = await prisma.sprints.findMany({
         where: {
           pid,
-          isEnded: false,
+          isEnded: completed === 'true' || false,
         },
         include: {
           tasks: {

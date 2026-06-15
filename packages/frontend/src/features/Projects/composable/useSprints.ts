@@ -34,6 +34,24 @@ export function useSprint() {
     }
   }
 
+  const fetchAllCompletedSprintsByProjectId = async (pid: string, silent = false) => {
+    if (!silent) {
+      loading.value = true
+    }
+
+    try {
+      const { sprints: _sprints } = await api.get(`/project/${pid}?completed=true`) as any
+
+      sprints.value = _sprints
+    }
+    catch (error: any | { message: string }) {
+      ElMessage.error(error.message)
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   const createSprint = async (payload: any) => {
     submitting.value = true
 
@@ -146,6 +164,7 @@ export function useSprint() {
     sprints,
     meta,
     fetchAllSprintsByProjectId,
+    fetchAllCompletedSprintsByProjectId,
     createSprint,
     createTask,
     findTaskById,

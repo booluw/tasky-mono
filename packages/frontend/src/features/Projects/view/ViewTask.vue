@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import Modal from '@/shared/components/Modal.vue'
 import { useDate } from '@/shared/composables/useDate'
 import { STATUS, TAG_TYPES } from '@/shared/utils/constants'
-import { useAuthStore } from '../../Auth/store/useAuthStore';
+import { useAuthStore } from '../../Auth/store/useAuthStore'
 import { useStaff } from '../../Staff/composable/useStaff'
 import { useSprint } from '../composable/useSprints'
 
@@ -113,14 +113,16 @@ async function createComment() {
 
   try {
     const { task: _task } = await usesprint.createTaskComment(
-      { id: route.params.taskId as string, text: comment.value, uid: auth.user.id }
+      { id: route.params.taskId as string, text: comment.value, uid: auth.user.id },
     )
     task.value = _task
-    comment.value = ""
-  } catch (error) {
+    comment.value = ''
+  }
+  catch (error) {
     console.error(error)
-  } finally {
-    addComment.value = false
+  }
+  finally {
+    addingComment.value = false
   }
 }
 
@@ -130,16 +132,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <Modal v-loading="loading" :heading="task.title" size="third"
-    @close="router.push({ name: 'view-project', params: { id: pid } })">
+  <Modal
+    v-loading="loading" :heading="task.title" size="half"
+    @close="router.push({ name: 'view-project', params: { id: pid } })"
+  >
     <template #subheading>
       <div class="text-sm text-gray-200">
         <div class="mb-3">
           {{ task.sprint ? `Sprint: ${task?.sprint?.title}` : '' }}
           |
           <div class="inline-flex gap-3 items-center">
-            <a class="text-primary text-sm cursor-pointer"
-              @click="changeSprint ? saveSprint() : changeSprint = !changeSprint">
+            <a
+              class="text-primary text-sm cursor-pointer"
+              :class="{ '!cursor-not-allowed' : task.sprint?.isEnded }"
+              @click="task.sprint?.isEnded ? '' : (changeSprint ? saveSprint() : changeSprint = !changeSprint)"
+            >
               {{ changeSprint ? 'Save' : 'Change' }}
             </a>
             <a v-if="changeSprint" class="text-red-500 text-sm cursor-pointer" @click="changeSprint = !changeSprint">
@@ -161,15 +168,20 @@ onMounted(() => {
             Staff Assigned
           </h4>
           <div class="flex items-center gap-5">
-            <el-autocomplete v-if="changeAssignee" v-model="assigneeUid"
+            <el-autocomplete
+              v-if="changeAssignee" v-model="assigneeUid"
               :placeholder="`${task.assignedTo.firstName} ${task.assignedTo.lastName}`" :loading="sprintLoading"
-              :fetch-suggestions="searchStaff" @select="updateAssignee" />
+              :fetch-suggestions="searchStaff" @select="updateAssignee"
+            />
             <div v-else>
               {{ task.assignedTo.firstName }}
               {{ task.assignedTo.lastName }}
             </div>
 
-            <a class="text-sm text-primary cursor-pointer" @click="changeAssignee = !changeAssignee">
+            <a
+              class="text-sm text-primary cursor-pointer"
+              :class="{ '!cursor-not-allowed': task.sprint?.isEnded }"
+              @click="task.sprint?.isEnded ? '' : changeAssignee = !changeAssignee">
               {{ changeAssignee ? 'Cancel' : 'Change' }}
             </a>
           </div>
@@ -186,10 +198,15 @@ onMounted(() => {
           <h4 class="text-xs text-gray-300">
             Status
           </h4>
-          <el-select ref="statusRef" v-model="task.status" v-loading="statusLoading" multiple :multiple-limit="1"
-            @change="updateStatus">
-            <el-option v-for="(status, key) in STATUS.filter((type: any) => type.scope.includes('task'))" :key
-              v-bind="status" />
+          <el-select
+            ref="statusRef" v-model="task.status" v-loading="statusLoading" multiple :multiple-limit="1"
+            :disabled="task.sprint?.isEnded"
+            @change="updateStatus"
+          >
+            <el-option
+              v-for="(status, key) in STATUS.filter((type: any) => type.scope.includes('task'))" :key
+              v-bind="status"
+            />
             <template #tag>
               <el-tag :type="TAG_TYPES[task.status as 'TO_DO']" class="capitalize">
                 {{ task.status?.toLowerCase().replaceAll('_', ' ') }}
@@ -202,12 +219,14 @@ onMounted(() => {
           <h4 class="text-xs text-gray-300">
             Description
           </h4>
-          <p class="">
+          <p class="max-sm:text-sm">
             {{ task.description }}
           </p>
         </div>
       </div>
-      <h3 v-if="task.comments.length !== 0" class="my-5">Comments</h3>
+      <h3 v-if="task.comments.length !== 0" class="my-5">
+        Comments
+      </h3>
       <el-scrollbar class="max-h-[25vh] mb-5">
         <el-empty v-if="task.comments.length === 0" description="No comments yet." />
         <template v-else>
@@ -222,15 +241,17 @@ onMounted(() => {
         </template>
       </el-scrollbar>
 
-      <div class="md:max-h-[15vh] overflow-auto grid gap-3">
-        <el-input v-model="comment" :autosize="{ minRows: 2, maxRows: 5 }" type="textarea"
-          placeholder="Please input your comment" size="large" />
+      <div class="md:max-h-[15vh] grid gap-3">
+        <el-input
+          v-model="comment" :autosize="{ minRows: 2, maxRows: 5 }" type="textarea"
+          placeholder="Please input your comment" size="large"
+        />
         <div class="flex gap-5 justify-between items-center">
           <p class="text-xs" :class="{ 'text-transparent': comment.length >= 20 }">
             Comments should be atleast 20 characters long.
             <b>{{ 20 - comment.length }} left</b>
           </p>
-          <el-button type="primary" size="large" @click="createComment()" :disabled="comment.length <= 20">
+          <el-button type="primary" size="large" :disabled="comment.length <= 20" @click="createComment()">
             Comment
           </el-button>
         </div>
