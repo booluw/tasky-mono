@@ -54,18 +54,18 @@ onMounted(() => {
                 CURRENT
               </el-tag>
             </div>
-            <p class="text-sm text-gray-300" v-if="!sprint.isBacklog">
+            <p v-if="!sprint.isBacklog" class="text-sm text-gray-300">
               {{ format(sprint.startDate, 'do MMM, yyy') }} -
               {{ format(sprint.endDate, 'do MMM, yyy') }}
             </p>
-            <p class="text-sm text-gray-300" v-else>
+            <p v-else class="text-sm text-gray-300">
               {{ sprint.tasks.length }} Tasks
             </p>
           </div>
         </div>
       </div>
 
-      <div v-if="!sprint.isBacklog" class="flex gap-5 items-center">
+      <div v-if="!(sprint.isBacklog || sprint.isEnded)" class="flex gap-5 items-center">
         <el-dropdown :disabled="loading" @command="handleCommand">
           <el-icon class="cursor-pointer" :size="20">
             <Loading v-if="loading" class="animate-spin" />
@@ -100,9 +100,10 @@ onMounted(() => {
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        <div class="text-gray-300 cursor-pointer flex items-center text-xs md:text-sm line-clamp-2" @click="isOpened = !isOpened">
-          Goal: {{ sprint.goals }}
-
+        <div class="text-gray-300 cursor-pointer flex items-center text-xs md:text-sm" @click="isOpened = !isOpened">
+          <p class="!line-clamp-2 md:w-46" :title="sprint.goals">
+            Goal: {{ sprint.goals }} oal: Clear out current deliverables with task and project information arrangemen
+          </p>
           <el-icon class="ml-2">
             <ArrowDown v-if="!isOpened" />
             <ArrowUp v-else />
@@ -112,21 +113,32 @@ onMounted(() => {
     </div>
 
     <div v-if="isOpened" class="mt-3">
+      <p v-if="!sprint.isBacklog" class="mb-3 pb-2 border-b border-gray-100">
+        <b class="text-gray-400 font-semibold">Goal:</b> &nbsp;
+        {{ sprint.goals }}
+      </p>
       <div v-if="sprint.tasks.length === 0" class="text-gray-300">
         No tasks {{ sprint.isBacklog ? 'added to backlog' : 'scheduled for this sprint' }}, yet.
-        <router-link class="text-gray-500 underline"
-          :to="{ name: 'add-task-to-sprint', params: { sprintId: sprint.id } }">
+        <router-link
+          class="text-gray-500 underline"
+          :to="{ name: 'add-task-to-sprint', params: { sprintId: sprint.id } }"
+        >
           Add task to {{ sprint.isBacklog ? 'project backlog' : 'sprint' }}
         </router-link>
       </div>
       <div v-else class="grid gap-3">
-        <div v-for="(task, key) in sprint.tasks" :key
-          class="border border-gray-50 rounded-xl p-5 flex justify-between items-center">
+        <div
+          v-for="(task, key) in sprint.tasks" :key
+          class="border border-gray-50 rounded-xl p-5 flex justify-between items-center"
+        >
           <div class="flex flex-col">
             <div class="flex gap-3">
               <router-link
-                :to="{ name: 'view-sprint-task', params: { id: sprint.pid, sprintId: sprint.id, taskId: task.id } }">{{
-                task.title }}</router-link>
+                :to="{ name: 'view-sprint-task', params: { id: sprint.pid, sprintId: sprint.id, taskId: task.id } }"
+              >
+                {{
+                  task.title }}
+              </router-link>
               <el-tag size="small" class="capitalize" :type="TAG_TYPES[task.status as 'TO_DO']">
                 {{ task.status.toLowerCase().replace('_', ' ') }}
               </el-tag>
@@ -134,7 +146,7 @@ onMounted(() => {
             <div class="text-gray-300 text-sm flex gap-3 flex-col md:flex-row">
               <div class="">
                 Staff Assigned: <span class="text-gray-500">{{ task.assignedTo.firstName }} {{ task.assignedTo.lastName
-                  }}</span>
+                }}</span>
               </div>
               <span class="hidden md:block">|</span>
               <div class="">
@@ -143,7 +155,8 @@ onMounted(() => {
             </div>
           </div>
           <router-link
-            :to="{ name: 'view-sprint-task', params: { id: sprint.pid, sprintId: sprint.id, taskId: task.id } }">
+            :to="{ name: 'view-sprint-task', params: { id: sprint.pid, sprintId: sprint.id, taskId: task.id } }"
+          >
             <el-button type="primary" size="large" plain bg text>
               View Details
             </el-button>

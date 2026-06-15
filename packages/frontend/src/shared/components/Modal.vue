@@ -13,16 +13,16 @@ const { heading, subheading, size = 'half' } = defineProps<{
 const width = computed(() => {
   switch (size) {
     case 'fourth':
-      return 'w-1/4'
+      return 'md:w-1/4 w-3/4'
 
     case 'third':
-      return 'w-1/3'
+      return 'md:w-1/3 w-3/4'
 
     case 'large':
-      return 'w-2/3'
+      return 'md:w-2/3 w-3/4'
 
     default:
-      return 'w-1/2'
+      return 'md:w-1/2 w-3/4'
   }
 })
 </script>
@@ -44,9 +44,9 @@ const width = computed(() => {
           <Close />
         </el-icon>
       </div>
-      <div class="py-5">
+      <el-scrollbar class="py-5 overflow-auto max-h-4/5">
         <slot />
-      </div>
+      </el-scrollbar>
     </div>
   </section>
 </template>

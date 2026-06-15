@@ -8,6 +8,7 @@ import {
   Delete,
   Request,
   Put,
+  Query,
 } from '@nestjs/common';
 import { SprintsService } from './sprints.service';
 import {
@@ -61,8 +62,8 @@ export class SprintsController {
   }
 
   @Get('project/:id')
-  findOne(@Param('id') id: string) {
-    return this.sprintsService.findSprintsByProjectId(id);
+  findOne(@Param('id') id: string, @Query() query: { completed?: string }) {
+    return this.sprintsService.findSprintsByProjectId(id, query.completed);
   }
 
   @Get('/task/:id')
