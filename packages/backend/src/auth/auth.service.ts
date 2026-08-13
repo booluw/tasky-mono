@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -7,7 +8,12 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 
 import { AuthLoginDto } from './dto/create-auth.dto';
-import { bcryptSalt, findUserByEmail, isEmailTaken } from 'utils/helpers';
+import {
+  bcryptSalt,
+  findUserByEmail,
+  isEmailTaken,
+  sendEmail,
+} from 'utils/helpers';
 import { Projects, Tasks, Users } from '@prisma/client';
 
 import { prisma } from 'config/prisma';
@@ -85,6 +91,37 @@ export class AuthService {
     } catch (error) {
       console.error(error);
 
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async resetPassword(email: string) {
+    try {
+      const user = await prisma.users.findUniqueOrThrow({
+        where: { email },
+      });
+
+      if (user) {
+        await prisma.users.update({
+          data: {
+            passwordHash: bcrypt.hashSync(email, bcryptSalt()),
+          },
+          where: {
+            email,
+          },
+        });
+
+        await sendEmail({
+          subject: 'Account Password Request',
+          to: [{ name: `${user.firstName} ${user.lastName}`, email }],
+          html: `
+            <h1>Hello there.</h1>
+            <p>Your asked for a password reset. Please log in with your email address as the password</p>
+            <p>Thank you.</p>
+          `,
+        });
+      }
+    } catch (error) {
       throw new InternalServerErrorException(error);
     }
   }

@@ -25,4 +25,9 @@ export class AuthController {
   setPassword(@Body() data: AuthLoginDto) {
     return this.authService.setPassword(data);
   }
+
+  @Post('/reset-password')
+  resetPassword(@Body() email: string) {
+    return this.authService.resetPassword(email);
+  }
 }
