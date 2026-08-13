@@ -64,9 +64,24 @@ export function useAuth() {
     }
   }
 
+  const forgotPassword = async function (email: string) {
+    loading.value = true
+    try {
+      const { message } = await api.post('/reset-password', { email })
+
+      ElMessage.success(message)
+      router.replace({ name: 'login' })
+    } catch (error: any | { message: string }) {
+      ElMessage.error(error.message)
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     logUserIn,
     setPassword,
     loading,
+    forgotPassword
   }
 }

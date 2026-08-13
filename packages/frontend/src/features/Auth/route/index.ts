@@ -18,6 +18,14 @@ const authRoutes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/forgot-password',
+    name: 'forgot-password',
+    component: () => import('../view/ForgotPassword.vue'),
+    meta: {
+      layout: 'auth'
+    }
+  },
+  {
     path: '/login',
     redirect: '/'
   }
