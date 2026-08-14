@@ -122,6 +122,7 @@ export class AuthService {
         });
       }
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException(error);
     }
   }
