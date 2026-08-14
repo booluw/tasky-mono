@@ -121,7 +121,7 @@ export async function sendEmail({
     message.to = to;
     message.htmlContent = html;
     message.sender = {
-      name: 'Damilola from Monitora',
+      name: 'Miss Feyi from BecomingDASH',
       email: 'dashprojectsmanagement@gmail.com',
     };
 
