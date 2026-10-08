@@ -38,6 +38,9 @@ model Users {
   createdSprints  Sprints[]
 
   clients Clients[] @relation("client")
+
+  payments      Payments[] @relation("userPayments")
+  addedPayments Payments[] @relation("addedPayments")
 }
 
 model Clients {
@@ -144,6 +147,32 @@ model Projects_Users {
   userRole String
 
   @@id([uid, pid])
+}
+
+model Payments {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  uid     String // user the payment belongs to
+  addedBy String // super admin who recorded it
+
+  amount Decimal        @db.Decimal(12, 2) // NGN
+  month  String // "YYYY-MM", the month this payment covers
+  paidAt DateTime
+  method PAYMENT_METHOD
+  note   String?        @db.VarChar(500)
+
+  user    Users @relation("userPayments", fields: [uid], references: [id], onDelete: Cascade)
+  creator Users @relation("addedPayments", fields: [addedBy], references: [id])
+
+  @@index([uid, month])
+}
+
+enum PAYMENT_METHOD {
+  TRANSFER
+  CASH
+  CARD
+  OTHER
 }
 
 enum ROLE {

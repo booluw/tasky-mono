@@ -4,14 +4,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 
 import { findUserById } from 'utils/helpers';
-import { CurrentUserService } from 'services/current-user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(
-    private reflector: Reflector,
-    private currentUserService: CurrentUserService,
-  ) {
+  constructor(private reflector: Reflector) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET,
@@ -32,8 +28,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!user) {
       throw new UnauthorizedException();
     }
-
-    this.currentUserService.setUser(user);
 
     return user;
   }

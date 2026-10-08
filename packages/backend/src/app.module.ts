@@ -12,6 +12,7 @@ import { ClientsModule } from './clients/clients.module';
 import { SprintsModule } from './sprints/sprints.module';
 import { CronModule } from './cron/cron.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { PaymentsModule } from './payments/payments.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -35,6 +36,7 @@ const ENV = process.env.NODE_ENV;
     SprintsModule,
     CronModule,
     DashboardModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
