@@ -8,7 +8,7 @@ export class CronService {
   async sendAllReportToClient() {
     const clientsAndProject = await prisma.clients.findMany({
       include: {
-        projects: true,
+        projects: { where: { status: { not: 'COMPLETED' } } },
       },
     });
 
@@ -25,6 +25,9 @@ export class CronService {
                   {
                     started: true,
                   },
+                  {
+                    isEnded: false,
+                  },
                 ],
               },
             });
@@ -36,15 +39,16 @@ export class CronService {
           }),
         );
 
-        return {
-          client: {
-            name: `${item.firstName} ${item.lastName}`,
-            email: item.email,
-          },
-          sprint: sprint.filter((sprint) => sprint.sprint !== null)[0],
+        const client = {
+          name: `${item.firstName} ${item.lastName}`,
+          email: item.email,
         };
+
+        return sprint
+          .filter((sprint) => sprint.sprint !== null)
+          .map((sprint) => ({ client, sprint }));
       }),
-    );
+    ).then((perClient) => perClient.flat());
 
     const sprintAndTasks = await Promise.all(
       clientsAndCurrentSprint.map(async (item) => {
@@ -86,9 +90,14 @@ export class CronService {
           html: clientReportEmailBuilder({
             client: item.client,
             sprint: {
-              progress:
-                item.tasks.filter((task) => task.status === 'DONE').length /
-                item.tasks.length,
+              progress: item.tasks.length
+                ? Math.ceil(
+                    (item.tasks.filter((task) => task.status === 'DONE')
+                      .length /
+                      item.tasks.length) *
+                      100,
+                  )
+                : 0,
               goal: item.sprint.goals ?? '',
               projectName: item.sprint.projectName,
             },

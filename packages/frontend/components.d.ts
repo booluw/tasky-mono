@@ -25,6 +25,7 @@ declare module 'vue' {
     ElFotmItem: typeof import('element-plus/es')['ElFotmItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElIoc: typeof import('element-plus/es')['ElIoc']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElOverflow: typeof import('element-plus/es')['ElOverflow']

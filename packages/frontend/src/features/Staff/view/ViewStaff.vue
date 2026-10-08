@@ -2,10 +2,13 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router';
 
+import { useAuthStore } from '@/features/Auth/store/useAuthStore'
+import UserPayments from '@/features/Payments/components/UserPayments.vue'
 import { useStaff } from '../composable/useStaff'
 
 const route = useRoute()
 const usestaff = useStaff()
+const { user } = useAuthStore()
 
 const loading = ref(false)
 const { onestaff: staff } = usestaff
@@ -35,5 +38,7 @@ onMounted(async () => {
     <p class="capitalize">
       {{ staff?.role?.toLowerCase() }}
     </p>
+
+    <UserPayments v-if="user.role === 'SUPER_ADMIN'" :uid="($route.params.id as string)" />
   </section>
 </template>

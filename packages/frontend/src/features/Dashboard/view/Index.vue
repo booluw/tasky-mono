@@ -4,6 +4,7 @@ import { computed, onMounted } from 'vue'
 
 import { useAuthStore } from '@/features/Auth/store/useAuthStore'
 import { useDate } from '@/shared/composables/useDate'
+import PaymentStatus from '@/features/Payments/components/PaymentStatus.vue'
 import DashboardMentions from '../components/mentions.vue'
 import { useDashoard } from '../composables/useDashboard'
 
@@ -101,7 +102,10 @@ onMounted(async () => {
         </div>
       </div>
 
-      <DashboardMentions />
+      <div class="col-span-2">
+        <PaymentStatus v-if="user.role !== 'CLIENT'" />
+        <DashboardMentions />
+      </div>
     </section>
   </section>
 
